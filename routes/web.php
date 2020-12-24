@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\TagController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,7 +20,10 @@ Route::view('/cat', 'public.category');
 Route::view('/single', 'public.single');
 Route::view('/dashboard', 'admin.home');
 
-Route::resource('category', CategoryController::class);
+Route::resource('/dashboard/category', CategoryController::class);
+
+Route::resource('/dashboard/tag', TagController::class);
+
 
 //Auth::routes();
 
