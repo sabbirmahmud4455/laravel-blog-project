@@ -1,3 +1,4 @@
+
 $.ajaxSetup({
     headers: {
         'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -25,8 +26,6 @@ function toastr_option(){
 }
 
 
-
-
 //show category  
 function all_category() {
     $.ajax({
@@ -51,14 +50,14 @@ function all_category() {
                 data = data + "<td class='d-flex'>"
 
                 data = data + "<span>"
-                data = data + "<button class='btn btn-link' onclick='edit_Cat_data(" + v.id + ")' data-toggle='modal' data-target='#edit_user_modal'>"
+                data = data + "<button class='btn btn-link' onclick='edit_Cat_data(" + v.id + ")' data-toggle='modal' data-target='#edit_category_form_model'>"
                 data = data + "<i class='fas fa-pencil-alt text-info' aria-hidden='true'></i>"
                 data = data + "</button>"
                 data = data + "</span>"
 
 
                 data = data + "<span>"
-                data = data + "<button class='btn btn-link' onclick='deleteData(" + v.id + ")'>"
+                data = data + "<button class='btn btn-link' onclick='delete_cat_data(" + v.id + ")'>"
                 data = data + "<i class='fa fa-trash text-danger' aria-hidden='true'></i>"
                 data = data + "</button>"
                 data = data + "</span>"
@@ -104,7 +103,6 @@ $('#add_categorys_form').submit(function (e) {
         data: form_data,
         dataType: "json",
         success: function (response) {
-            console.log(response);
 
             $('#add_categorys_form #catagory_name').val('');
             $('#add_categorys_form #catagory_slag').val('');
@@ -113,22 +111,80 @@ $('#add_categorys_form').submit(function (e) {
             toastr["success"]("Category Added Successfully");
             toastr_option();
             
-            $('#add_categorys_form #catagory_name_alrt').html('');
-            $('#add_categorys_form #catagory_slag_alrt').html('');
 
             all_category();
         },
         error: function (error) {
-            $('#add_categorys_form #catagory_name_alrt').html(error.responseJSON.errors.name);
-            $('#add_categorys_form #catagory_slag_alrt').html(error.responseJSON.errors.name);
+            
+            if (error.responseJSON.errors.name) {
+                toastr["error"](error.responseJSON.errors.name);
+            toastr_option();
+            };
+            if (error.responseJSON.errors.slag) {
+                toastr["error"](error.responseJSON.errors.slag);
+            toastr_option();
+            }
         }
     });
 });
 
+//edit 
+function edit_Cat_data(id){
+    $.ajax({
+        type: "GET",
+        url: "category/"+id+"/edit",
+        dataType: "json",
+        success: function (response) {
+            $('#edit_categorys_form #catagory_id').val(response.id);
+            $('#edit_categorys_form #catagory_name').val(response.name);
+            $('#edit_categorys_form #catagory_slag').val(response.slag);
+            $('#edit_categorys_form  #catagory_description').val(response.description);
+        }
+    });
+}
 
+//update
+$('#edit_categorys_form').submit(function (e) { 
+    e.preventDefault();
+    var id= $('#edit_categorys_form #catagory_id').val();
+    var form_data={
+        'name': $('#edit_categorys_form #catagory_name').val(),
+        'slag': $('#edit_categorys_form #catagory_slag').val(),
+        'description': $('#edit_categorys_form #catagory_description').val(),
+    };
+    $.ajax({
+        type: "PUT",
+        url: "category/"+id,
+        data: form_data,
+        dataType: "json",
+        success: function (response) {
+            $('#edit_categorys_form #catagory_name').val('');
+            $('#edit_categorys_form #catagory_slag').val('');
+            $('#edit_categorys_form  #catagory_description').val('');
+
+            toastr["success"]("Category Update Successfully");
+            toastr_option();
+
+            all_category();
+        },
+        error: function (error) {
+            
+            if (error.responseJSON.errors.name) {
+                toastr["error"](error.responseJSON.errors.name);
+            toastr_option();
+            };
+            if (error.responseJSON.errors.slag) {
+                toastr["error"](error.responseJSON.errors.slag);
+            toastr_option();
+            }
+        }
+    });
+
+    
+});
 
 //deleteData
-function deleteData(id){
+function delete_cat_data(id){
     $.ajax({
         type: "DELETE",
         url: "category/"+id,

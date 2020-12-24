@@ -96,12 +96,10 @@
                         <label for="catagory_name">Name</label>
                         <input type="text" class="form-control" name="catagory_name" id="catagory_name"
                             placeholder="Enter Catagory">
-                            <span class=" text-danger" id="catagory_name_alrt"></span>
                     </div>
                     <div class="form-group">
                         <label for="catagory_slag">Slag</label>
                         <input type="text" class="form-control" name="catagory_slag" id="catagory_slag" placeholder="Enter Slag">
-                        <span class=" text-danger" id="catagory_slag_alrt"></span>
                     </div>
                     <div class="form-group">
                         <label for="catagory_description">Description</label>
@@ -109,6 +107,43 @@
                             placeholder="Enter Slag"></textarea>
                     </div>
                     <button type="submit" class="btn btn-block btn-primary">Add</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{-- edit category model --}}
+<!-- Button trigger modal -->
+<!-- Modal -->
+<div class="modal fade" id="edit_category_form_model" tabindex="-1" role="dialog"
+    aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Update Category</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="edit_categorys_form">
+                    <input type="hidden" name="id" id="catagory_id">
+                    <div class="form-group">
+                        <label for="catagory_name">Name</label>
+                        <input type="text" class="form-control" name="catagory_name" id="catagory_name"
+                            placeholder="Enter Catagory">
+                    </div>
+                    <div class="form-group">
+                        <label for="catagory_slag">Slag</label>
+                        <input type="text" class="form-control" name="catagory_slag" id="catagory_slag" placeholder="Enter Slag">
+                    </div>
+                    <div class="form-group">
+                        <label for="catagory_description">Description</label>
+                        <textarea class="form-control" name="catagory_description" id="catagory_description" rows="3"
+                            placeholder="Enter Slag"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-block btn-primary">Update</button>
                 </form>
             </div>
         </div>

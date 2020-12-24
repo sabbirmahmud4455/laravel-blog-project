@@ -14,10 +14,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        
         return view('admin.category');
-
-
     }
 
     /**
@@ -72,7 +69,7 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        //
+        return response()->json($category);
     }
 
     /**
@@ -84,7 +81,16 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
-        //
+        $request-> validate([
+            'name' => 'required|unique:categories,name,$category->name|max:255',
+            'slag' => 'required|max:255',
+        ]);
+        $category->update([
+            'name'=> $request->name,
+            'slag'=> $request->slag,
+            'description'=> $request->description
+        ]);
+        return response()->json();
     }
 
     /**
@@ -95,12 +101,9 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        
-        
         if ($category) {
             $category->delete();
-
-            return response()->json('delete successfully');
+            return response()->json();
         }
 
     }
