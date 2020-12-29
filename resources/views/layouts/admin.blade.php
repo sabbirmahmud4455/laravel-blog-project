@@ -1,8 +1,7 @@
+
 <!DOCTYPE html>
-<!--
-This is a starter template page. Use this page to start your new project from
-scratch. This page gets rid of all links and provides the needed markup only.
--->
+
+
 <html lang="en">
 
 <head>
@@ -202,7 +201,15 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             <a href="{{route('tag.index')}}" class="nav-link">
                                 <i class="nav-icon fas fa-th"></i>
                                 <p>
-                                    Tag
+                                    Tags
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{route('post.index')}}" class="nav-link">
+                                <i class="nav-icon fas fa-th"></i>
+                                <p>
+                                    Posts
                                 </p>
                             </a>
                         </li>
@@ -262,6 +269,59 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
     {{-- custom js --}}
     <script src="{{asset('admin')}}/dist/js/custom.js"></script>
+
+
+    @if ($message = Session::get('success'))
+
+    
+      <script>
+        toastr["success"]('{{$message}}');
+        toastr.options = {
+        "closeButton": true,
+        "debug": false,
+        "newestOnTop": false,
+        "progressBar": true,
+        "positionClass": "toast-top-right",
+        "preventDuplicates": false,
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "2000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn"
+      }
+      </script>
+
+@endif
+
+    @if ($errors->any())
+    @foreach ($errors->all() as $item)
+        <script>
+        toastr["error"]('{{$item}}');
+        toastr.options = {
+        "closeButton": true,
+        "debug": false,
+        "newestOnTop": false,
+        "progressBar": true,
+        "positionClass": "toast-top-right",
+        "preventDuplicates": false,
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "2000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn"
+      }
+        </script>
+        
+    @endforeach
+    
+    
+    @endif
 </body>
 
 </html>
