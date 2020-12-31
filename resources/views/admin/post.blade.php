@@ -43,6 +43,7 @@
                                     <th>Title</th>
                                     <th>Slag</th>
                                     <th>Category</th>
+                                    <th>Images</th>
                                     <th>Publish time</th>
                                     <th>User</th>
                                     <th>Action</th>
@@ -57,7 +58,8 @@
                                     <td>{{$sl ++}}</td>
                                     <td>{{$post->title}}</td>
                                     <td>{{$post->slag}}</td>
-                                    <td>{{$post->category}}</td>
+                                    <td>{{$post->category}}</td> 
+                                    <td><img src="{{asset('images/post').'/'.$post->image}}" style="max-width: 100px" alt="img"></td>
                                     <td>{{$post->publish_at}}</td>
                                     <td>{{$post->user_id}}</td>
                                     <td class="d-flex">
@@ -119,7 +121,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="" action="{{route('post.store')}}" method="POST">
+                <form id="" action="{{route('post.store')}}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group">
                         <label for="post_title">Title</label>

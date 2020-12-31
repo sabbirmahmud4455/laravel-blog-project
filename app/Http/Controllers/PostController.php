@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Post;
 use DateTime;
+use Illuminate\Support\Facades\File; 
+
+// File
 use Illuminate\Http\Request;
 
 class PostController extends Controller
@@ -43,12 +46,20 @@ class PostController extends Controller
         $request->validate([
             'title'=>'required|unique:posts,title',
             'category'=>'required',
+            'image'=> 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ]);
+
+        if (isset($request->image)) {
+            $imageName = time().'.'.$request->image->extension();
+        $request->image->move(public_path('images/post'), $imageName);
+        }
+        
+
         Post::insert([
             'title'=> $request->title,
             'category_id'=> $request->category,
             'category'=> $category->name,
-            'image'=> $request->image,
+            'image'=> $imageName,
             'user_id'=> 2,
             'description'=> $request->description,
             'publish_at'=> new DateTime('now'),
@@ -115,7 +126,17 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
+
+
         if ($post) {
+
+            $image_path = "images/post/".$post->image;
+
+            if (File::exists($image_path)) {
+                File::delete($image_path);
+                //unlink($image_path);
+            }
+
             $post->delete();
             return redirect()->back()->with('success','Post Delete successfully!');
         }

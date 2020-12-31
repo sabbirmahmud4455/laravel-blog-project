@@ -52,7 +52,10 @@
                             </div>
                             <div class="form-group">
                                 <label for="featured_img">Featured Image </label>
-                                <input class=" form-control-file" type="file" name="image" id="featured_img">
+                                <div class=" d-flex">
+                                    <input class="form-control-file" type="file" name="image" id="featured_img">
+                                <img src="{{asset('images/post').'/'.$post->image}}" class="ml-auto" style="max-width: 100px;" alt="img">
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label for="catagory_description">Description</label>
