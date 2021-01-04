@@ -4,6 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Model\Category;
+
+
 
 class Post extends Model
 {
@@ -14,6 +17,12 @@ class Post extends Model
         'image', 
         'description', 
         'category_id',
-        'category'
     ];
+
+    public function category(){
+        return $this->belongsTo('App\Models\Category');
+    }
+    public function post_tag(){
+        return $this->belongsToMany('App\Models\Tag');
+    }
 }

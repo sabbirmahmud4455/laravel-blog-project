@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Post;
-use DateTime;
+use App\Models\Tag;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\File; 
 
 // File
@@ -20,8 +21,10 @@ class PostController extends Controller
     public function index()
     {
         $categorys= Category::all();
+        $tags= Tag::all();
         $posts= Post::orderBy('id','desc')->paginate(20);
-        return view('admin.post', compact('posts', 'categorys'));
+
+        return view('admin.post', compact(['posts', 'categorys', 'tags']));
     }
 
     /**
@@ -42,28 +45,35 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        $category=Category::find($request->category);
         $request->validate([
             'title'=>'required|unique:posts,title',
             'category'=>'required',
             'image'=> 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ]);
 
+
         if (isset($request->image)) {
             $imageName = time().'.'.$request->image->extension();
         $request->image->move(public_path('images/post'), $imageName);
         }
         
+        $post= new Post();
 
-        Post::insert([
-            'title'=> $request->title,
-            'category_id'=> $request->category,
-            'category'=> $category->name,
-            'image'=> $imageName,
-            'user_id'=> 2,
-            'description'=> $request->description,
-            'publish_at'=> new DateTime('now'),
-        ]);
+            $post->title = $request->title;
+            $post->category_id = $request->category;
+            if (isset($request->image)) {
+                $post->image = $imageName;
+            };
+            $post->user_id =2;
+            $post->description = $request->description;
+            $post->publish_at = Carbon::now();
+            $post->created_at = Carbon::now();
+            
+        $post->save();
+
+
+        $post->post_tag()->attach($request->tags);
+        
         return redirect()->back()->with('success','Post created successfully!');
     }
 
@@ -75,7 +85,8 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        //
+        
+        return view('admin.post_view', compact('post'));
     }
 
     /**
@@ -86,8 +97,9 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
+        $tags= Tag::all();
         $categorys= Category::all();
-        return view('admin.post_edit', compact('post', 'categorys'));
+        return view('admin.post_edit', compact(['post', 'categorys', 'tags']));
     }
 
     /**
@@ -99,22 +111,49 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        
-        $category=Category::find($request->category);
         $id= $post->id;
         $request->validate([
             'title'=>'required|unique:posts,title,'.$id,
-            
             'category'=>'required',
+            'image'=> 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ]);
+
+        if (isset($request->image)) {
+        $imageName = time().'.'.$request->image->extension();
+        $request->image->move(public_path('images/post'), $imageName);
+
+
+            $image_path = "images/post/".$post->image;
+
+            if (File::exists($image_path)) {
+                File::delete($image_path);
+                //unlink($image_path);
+            }
+        }
         
-        $post->update([
-            'title'=> $request->title,
-            'category_id'=> $request->category,
-            'category'=> $category->name,
-            'image'=> $request->image,
-            'description'=> $request->description,
-        ]);
+            $post->post_tag()->sync($request->tags);
+
+            $post->title = $request->title;
+            $post->category_id = $request->category;
+            if (isset($request->image)) {
+                $post->image = $imageName;
+            };
+            $post->description = $request->description;
+            $post->updated_at = Carbon::now();
+            
+            $post->save();
+
+
+            
+
+
+
+        // $post->update([
+        //     'title'=> $request->title,
+        //     'category_id'=> $request->category,
+        //     'image'=> $request->image,
+        //     'description'=> $request->description,
+        // ]);
         return redirect()->back()->with('success','Post Update successfully!');
     }
 
@@ -127,16 +166,15 @@ class PostController extends Controller
     public function destroy(Post $post)
     {
 
-
         if ($post) {
-
+            $post->post_tag()->detach();
             $image_path = "images/post/".$post->image;
 
             if (File::exists($image_path)) {
                 File::delete($image_path);
                 //unlink($image_path);
             }
-
+            
             $post->delete();
             return redirect()->back()->with('success','Post Delete successfully!');
         }

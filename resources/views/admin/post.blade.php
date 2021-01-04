@@ -1,5 +1,20 @@
 @extends('layouts.admin')
 
+@section('style')
+    <link rel="stylesheet" href="{{asset('admin')}}/plugins/summernote/summernote-bs4.min.css">
+@endsection
+@section('script')
+    <script src="{{asset('admin')}}/plugins/summernote/summernote-bs4.min.js"></script>
+    <script>
+        $('#catagory_description').summernote({
+          placeholder: 'Description',
+          tabsize: 2,
+          height: 100
+        });
+      </script>
+@endsection
+
+
 @section('main_content')
 
 <!-- Content Header (Page header) -->
@@ -41,7 +56,7 @@
                                 <tr>
                                     <th style="width: 10px">#</th>
                                     <th>Title</th>
-                                    <th>Slag</th>
+                                    <th>Tag</th>
                                     <th>Category</th>
                                     <th>Images</th>
                                     <th>Publish time</th>
@@ -57,12 +72,22 @@
                                 <tr>
                                     <td>{{$sl ++}}</td>
                                     <td>{{$post->title}}</td>
-                                    <td>{{$post->slag}}</td>
-                                    <td>{{$post->category}}</td> 
-                                    <td><img src="{{asset('images/post').'/'.$post->image}}" style="max-width: 100px" alt="img"></td>
+                                    <td>
+                                        @foreach ($post->post_tag as $tag)
+                                            <span class="badge badge-primary">{{$tag->name}}</span>
+                                        @endforeach
+                                    </td>
+                                    <td>{{$post->category->name}}</td> 
+                                    <td><img src="{{asset('images/post').'/'.$post->image}}" style="max-width: 60px" alt="img"></td>
                                     <td>{{$post->publish_at}}</td>
                                     <td>{{$post->user_id}}</td>
                                     <td class="d-flex">
+                                        <span>
+                                            <a href="{{ route('post.show',[$post->id])}}" class="btn btn-link" ><i
+                                                  
+                                                    <i class="fa fa-eye" aria-hidden="true"></i>
+                                            </a>
+                                        </span>
                                         <span>
                                             <a href="{{ route('post.edit',[$post->id])}}" class="btn btn-link" ><i
                                                     class="fas fa-pencil-alt text-info" aria-hidden="true"></i>
@@ -74,9 +99,8 @@
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-link"><i class="fa fa-trash text-danger"
                                                     aria-hidden="true"></i>
-                                            </button>
+                                                </button>
                                             </form>
-                                            
                                         </span>
                                     </td>
                                 </tr>
@@ -85,6 +109,7 @@
                             </tbody>
                         </table>
                     </div>
+
                     <!-- /.card-body -->
                     <div class="card-footer clearfix">
                         <ul class="pagination pagination-sm m-0 float-right">
@@ -95,6 +120,7 @@
                             <li class="page-item"><a class="page-link" href="#">»</a></li>
                         </ul>
                     </div>
+
                 </div>
             </div>
 
@@ -135,6 +161,20 @@
                             <option value="{{$item->id}}">{{$item->name}} </option>
                             @endforeach
                         </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Tags</label>
+                        <div class="d-flex flex-wrap">
+                            @foreach ($tags as $item)
+                                    <div class="m-2">
+                                        <div class="custom-control custom-checkbox">
+                                        <input class="custom-control-input" name="tags[]" type="checkbox" id="tag{{$item->id}}" value="{{$item->id}}">
+                                        <label for="tag{{$item->id}}" class="custom-control-label">{{$item->name}}</label>
+                                    </div>
+                              </div>
+                            @endforeach
+                        </div>
+                        
                     </div>
                     <div class="form-group">
                         <label for="featured_img">Featured Image </label>
