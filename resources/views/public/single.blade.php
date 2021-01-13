@@ -3,18 +3,21 @@
 @section('contant')
     
 <div class="site-cover site-cover-sm same-height overlay single-page"
-             style="background-image: url('{{asset("miniblog")}}/images/img_2.jpg');">
+             style="background-image: url('{{asset("images/post")}}/{{$single_post->image}}');">
              <div class="container">
                  <div class="row same-height justify-content-center">
                      <div class="col-md-12 col-lg-10">
                          <div class="post-entry text-center">
-                             <span class="post-category text-white bg-success mb-3">Nature</span>
-                             <h1 class="mb-4"><a href="#">The AI magically removes moving objects from videos.</a></h1>
+                             @foreach ($single_post->post_tag as $post_tag)
+                                <span class="post-category text-white bg-success mb-3">{{$post_tag->name}}</span> 
+                             @endforeach
+                             
+                             <h1 class="mb-4"><a href="#">{{$single_post->title}}</a></h1>
                              <div class="post-meta align-items-center text-center">
                                  <figure class="author-figure mb-0 mr-3 d-inline-block"><img src="{{asset('miniblog')}}/images/person_1.jpg"
                                          alt="Image" class="img-fluid"></figure>
-                                 <span class="d-inline-block mt-1">By Carrol Atkinson</span>
-                                 <span>&nbsp;-&nbsp; February 10, 2019</span>
+                                 <span class="d-inline-block mt-1">By {{$single_post->user->name}}</span>
+                                 <span>&nbsp;-&nbsp; {{$single_post->updated_at->diffForHumans()}}</span>
                              </div>
                          </div>
                      </div>
@@ -214,10 +217,8 @@
                              <div class="bio text-center">
                                  <img src="{{asset('miniblog')}}/images/person_2.jpg" alt="Image Placeholder" class="img-fluid mb-5">
                                  <div class="bio-body">
-                                     <h2>Craig David</h2>
-                                     <p class="mb-4">Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                                         Exercitationem facilis sunt repellendus excepturi beatae porro debitis
-                                         voluptate nulla quo veniam fuga sit molestias minus.</p>
+                                     <h2>{{$single_post->user->name}}</h2>
+                                     <p class="mb-4">{{$single_post->user->short_desctiption}}</p>
                                      <p><a href="#" class="btn btn-primary btn-sm rounded px-4 py-2">Read my bio</a></p>
                                      <p class="social">
                                          <a href="#" class="p-2"><span class="fa fa-facebook"></span></a>

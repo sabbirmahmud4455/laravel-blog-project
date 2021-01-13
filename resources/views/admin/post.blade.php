@@ -9,7 +9,7 @@
         $('#catagory_description').summernote({
           placeholder: 'Description',
           tabsize: 2,
-          height: 100
+          height: 200
         });
       </script>
 @endsection
@@ -80,7 +80,7 @@
                                     <td>{{$post->category->name}}</td> 
                                     <td><img src="{{asset('images/post').'/'.$post->image}}" style="max-width: 60px" alt="img"></td>
                                     <td>{{$post->publish_at}}</td>
-                                    <td>{{$post->user_id}}</td>
+                                    <td>{{$post->user->name}}</td>
                                     <td class="d-flex">
                                         <span>
                                             <a href="{{ route('post.show',[$post->id])}}" class="btn btn-link" ><i

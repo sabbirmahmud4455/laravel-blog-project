@@ -10,10 +10,14 @@ use Illuminate\Support\Facades\File;
 
 // File
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
+
+    
     /**
+     * 
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -22,7 +26,7 @@ class PostController extends Controller
     {
         $categorys= Category::all();
         $tags= Tag::all();
-        $posts= Post::orderBy('id','desc')->paginate(20);
+        $posts= Post::with(["post_tag", "user", "category"])->orderBy('id','desc')->paginate(20);
 
         return view('admin.post', compact(['posts', 'categorys', 'tags']));
     }
@@ -48,13 +52,13 @@ class PostController extends Controller
         $request->validate([
             'title'=>'required|unique:posts,title',
             'category'=>'required',
-            'image'=> 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+            'image'=> 'image|mimes:jpeg,png,jpg,gif,svg'
         ]);
 
 
         if (isset($request->image)) {
             $imageName = time().'.'.$request->image->extension();
-        $request->image->move(public_path('images/post'), $imageName);
+            $request->image->move(public_path('images/post'), $imageName);
         }
         
         $post= new Post();
@@ -64,7 +68,7 @@ class PostController extends Controller
             if (isset($request->image)) {
                 $post->image = $imageName;
             };
-            $post->user_id =2;
+            $post->user_id = Auth::user()->id;
             $post->description = $request->description;
             $post->publish_at = Carbon::now();
             $post->created_at = Carbon::now();
@@ -115,7 +119,7 @@ class PostController extends Controller
         $request->validate([
             'title'=>'required|unique:posts,title,'.$id,
             'category'=>'required',
-            'image'=> 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+            'image'=> 'image|mimes:jpeg,png,jpg,gif,svg'
         ]);
 
         if (isset($request->image)) {

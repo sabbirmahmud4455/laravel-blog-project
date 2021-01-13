@@ -41,7 +41,7 @@
                          </form>
                      </div>
                      <div class="col-4 site-logo">
-                         <a href="index-2.html" class="text-black h2 mb-0">Mini Blog</a>
+                         <a href="{{route('frontend.home')}}" class="text-black h2 mb-0">Mini Blog</a>
                      </div>
                      <div class="col-8 text-right">
                          <nav class="site-navigation" role="navigation">
@@ -64,10 +64,10 @@
          </header>
 
 
-        @yield('contant')
+         @yield('contant')
 
 
-         
+
 
 
 

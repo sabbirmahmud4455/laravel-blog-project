@@ -174,7 +174,7 @@
                             alt="User Image">
                     </div>
                     <div class="info">
-                        <a href="#" class="d-block">Alexander Pierce</a>
+                        <a href="#" class="d-block"> {{auth()->user()->name}} </a>
                     </div>
                 </div>
 
@@ -215,6 +215,26 @@
                                     Posts
                                 </p>
                             </a>
+                        </li>
+                        <li class="nav-item badge badge-primary">
+                            <a href="{{route('frontend.home')}}" target="_blank" class="nav-link">
+                                <i class="nav-icon fas fa-th"></i>
+                                <p>
+                                    Visi Website
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item badge badge-primary">
+                            <form action="{{route('logout')}}" method="post">
+                                @csrf
+                                <button type="submit" class="nav-link">
+                                     <i class="nav-icon fas fa-th"></i>
+                                <p>
+                                    Logout
+                                </p>
+                                </button>
+                            </form>
+                           
                         </li>
                     </ul>
                 </nav>

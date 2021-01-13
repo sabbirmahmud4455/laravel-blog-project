@@ -30,7 +30,6 @@
                 <div class="card">
                     <div class="card-header d-flex">
                         <h3 class="card-title">Post</h3>
-                        
                         <a class="ml-auto btn btn-outline-primary" href="/dashboard/post">Posts list</a>
                     </div>
                     <!-- /.card-header -->
@@ -50,6 +49,10 @@
                                 <tr>
                                     <td scope="row" style="width: 200px">Category</td>
                                     <td>{{$post->category->name}}</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row" style="width: 200px">Author</td>
+                                    <td>{{$post->user->name}}</td>
                                 </tr>
                                 <tr>
                                     <td scope="row" style="width: 200px">Tags</td>
